@@ -1,4 +1,4 @@
 retrieve.title = "Nineteen Eighty-Four"
 retrieve.save()
-Book.objects.get(id = retrieve.id).title
-<!-- 'Nineteen Eighty-Four' -->
+Book.objects.get(book).title
+<!-- retrieve'Nineteen Eighty-Four' -->
