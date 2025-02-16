@@ -1,4 +1,4 @@
 from bookshelf.models import Book
-retrieve.delete()
+book.delete()
 Book.objects.all()
 <!-- <QuerySet []> -->
