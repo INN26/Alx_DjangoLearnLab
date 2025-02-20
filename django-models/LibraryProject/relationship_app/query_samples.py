@@ -2,7 +2,6 @@ import sys
 import os
 import django
 
-# Ensure the project root is in the Python path
 sys.path.append("/mnt/c/Users/Admin/Alx_DjangoLearnLab/django-models/LibraryProject")
 
 # Set up Django environment
