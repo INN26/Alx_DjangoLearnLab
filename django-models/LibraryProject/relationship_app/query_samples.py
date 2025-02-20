@@ -39,14 +39,11 @@ library.books.add(book1, book2)
 # Create or get librarian
 librarian, _ = Librarian.objects.get_or_create(name="Maria Grace", library=library)
 
-# Retrieve the librarian for the library using `.filter().first()` instead of `.get()`
-librarian_for_library = Librarian.objects.filter(library=library).first()
+# Retrieve the librarian 
+librarian_for_library = Librarian.objects.get(library=library)
 
 # Display librarian details
-if librarian_for_library:
-    print(f"\nLibrarian for {library.name}: {librarian_for_library.name}")
-else:
-    print(f"\nNo librarian found for {library.name}.")
+print(f"\nLibrarian for {library.name}: {librarian_for_library.name}")
 
 # Query and display all books by the specific author using the required filtering method
 print(f"\nBooks by {author_name}:")
