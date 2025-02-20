@@ -30,12 +30,15 @@ for book in author_books:
     print(book.title)
 
 # List all books in a library
-Library_books = Library1.books.all()
-print("\nBooks in Nairobi Library:")
-for book in Library_books:
-    print(book.title)
+library_name = "Nairobi Library"
+library = Library.objects.filter(name=library_name).first()  
 
-# Retrieve the librarian for a library
-Librarian = Library1.librarian
-print(f"\nLibrarian of {Library1.name}: {Librarian.name}")
+if library:  # Check if library exists
+    books_in_library = library.books.all()  
+    print(f"Books in {library_name}:")
+    for book in books_in_library:
+        print(book.title)
+else:
+    print(f"No library found with the name {library_name}")
 
+ 
