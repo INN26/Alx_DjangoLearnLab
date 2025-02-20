@@ -15,20 +15,20 @@ from relationship_app.models import Author, Book, Library, Librarian
 author_name = "NoViolet Bulawayo"
 
 # Ensure the author exists before fetching
-author, _ = Author.objects.get_or_create(name=author_name)
+author, created_author = Author.objects.get_or_create(name=author_name)
 
 # Fetch the author explicitly as required by the task checker
 author = Author.objects.get(name=author_name)
 
 # Create or get books
-book1, _ = Book.objects.get_or_create(title="Glory", author=author)
-book2, _ = Book.objects.get_or_create(title="We Need New Names", author=author)
+book1, created_book1 = Book.objects.get_or_create(title="Glory", author=author)
+book2, created_book2 = Book.objects.get_or_create(title="We Need New Names", author=author)
 
 # Define library name
 library_name = "Nairobi Library"
 
 # Ensure the library exists before fetching
-library, _ = Library.objects.get_or_create(name=library_name)
+library, created_library = Library.objects.get_or_create(name=library_name)
 
 # Fetch the library explicitly as required by the task checker
 library = Library.objects.get(name=library_name)
@@ -37,9 +37,9 @@ library = Library.objects.get(name=library_name)
 library.books.add(book1, book2)  
 
 # Create or get librarian
-librarian, _ = Librarian.objects.get_or_create(name="Maria Grace", library=library)
+librarian, created_librarian = Librarian.objects.get_or_create(name="Maria Grace", library=library)
 
-# Retrieve the librarian 
+# etrieve the librarian using `Librarian.objects.get(library=library)`
 librarian_for_library = Librarian.objects.get(library=library)
 
 # Display librarian details
