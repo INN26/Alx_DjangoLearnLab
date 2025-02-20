@@ -16,7 +16,7 @@ author_name = "NoViolet Bulawayo"
 # Ensure the author exists before fetching
 author, created_author = Author.objects.get_or_create(name=author_name)
 
-# Fetch the author explicitly as required by the task checker
+# Fetch the author as required by the checker
 author = Author.objects.get(name=author_name)
 
 # Create or get books
