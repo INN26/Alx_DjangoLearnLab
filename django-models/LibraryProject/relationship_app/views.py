@@ -22,7 +22,8 @@ def add_author(name):
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.views.generic import CreateView   
-from django.contrib.auth import login   
+from django.contrib.auth import login  
+from django.contrib.auth import logout 
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import path
 
@@ -36,9 +37,12 @@ class SignUpView(CreateView):
 urlpatterns = [
     path('login/', LoginView.as_view(template_name='registration/login.html'), name='login'),
     path('logout/',LogoutView.as_view(), name= 'logout'),
-    path(UserCreationForm(), "relationship_app/register.html")
+
 ]
 
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.forms import AuthenticationForm
 
 def register(request):
     if request.method == "POST":
@@ -51,3 +55,23 @@ def register(request):
         form = UserCreationForm()
     
     return render(request, "relationship_app/register.html", {"form": form})
+
+
+def user_login(request):
+    if request.method == "POST":
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect("home")  # Redirect to a valid URL name
+    else:
+        form = AuthenticationForm()
+    return render(request, "relationship_app/login.html", {"form": form})
+
+
+def user_logout(request):
+    logout(request)
+    return redirect('login') 

@@ -8,6 +8,8 @@ urlpatterns = [
 ]
 
 from . import views
+from django.contrib.auth.views import LogoutView
+from django.contrib.auth.views import LoginView
 from .views import register
 urlpatterns = [
     path('login/', views.user_login, name='login'),
