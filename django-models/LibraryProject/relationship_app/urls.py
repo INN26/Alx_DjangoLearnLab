@@ -15,9 +15,6 @@ urlpatterns = [
     path('login/', views.user_login, name='login'),
     path('logout/', views.user_logout, name='logout'),
     path('register/', views.register, name='register'),
-    path(views.register, "LogoutView.as_view(template_name="), 
+    path("logout/", LogoutView.as_view(template_name="your_template.html"), name="logout"), 
     path(views.register, "LoginView.as_view(template_name=")
 ]
-
-
-
