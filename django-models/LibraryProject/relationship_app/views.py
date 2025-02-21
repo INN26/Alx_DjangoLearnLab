@@ -2,11 +2,6 @@ from django.shortcuts import render
 from .models import Book, Library, Author
 from django.views.generic.detail import DetailView
 from .models import Library
-from django.contrib.auth.forms import UserCreationForm
-from django.urls import reverse_lazy
-from django.views.generic import CreateView      
-from django.contrib.auth.views import LoginView, LogoutView
-from django.urls import path
 
 def list_books(request):
     books = Book.objects.all()  
@@ -24,6 +19,12 @@ def add_author(name):
     else:
         print(f"Author '{name}' already exists.")
        
+from django.contrib.auth.forms import UserCreationForm
+from django.urls import reverse_lazy
+from django.views.generic import CreateView   
+from django.contrib.auth import login   
+from django.contrib.auth.views import LoginView, LogoutView
+from django.urls import path
 
 #UserCreationFormform and the CreateViewclass-based view to handle user registration.
 class SignUpView(CreateView):
