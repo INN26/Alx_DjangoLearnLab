@@ -41,6 +41,9 @@ INSTALLED_APPS = [
     'relationship_app',
 ]
 
+LOGIN_REDIRECT_URL = "/accounts/profile"
+LOGOUT_REDIRECT_URL = "/accounts/profile"
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
