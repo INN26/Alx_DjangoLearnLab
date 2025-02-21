@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Book, Library, Author
 from django.views.generic.detail import DetailView
 from .models import Library
@@ -36,5 +36,18 @@ class SignUpView(CreateView):
 urlpatterns = [
     path('login/', LoginView.as_view(template_name='registration/login.html'), name='login'),
     path('logout/',LogoutView.as_view(), name= 'logout'),
-    path("UserCreationForm()", "relationship_app/register.html")
+    path(UserCreationForm(), "relationship_app/register.html")
 ]
+
+
+def register(request):
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)  # Log the user in immediately after registration
+            return redirect("home")  # Redirect to homepage or dashboard after registration
+    else:
+        form = UserCreationForm()
+    
+    return render(request, "relationship_app/register.html", {"form": form})
