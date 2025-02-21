@@ -75,3 +75,28 @@ def user_login(request):
 def user_logout(request):
     logout(request)
     return redirect('login') 
+
+from django.contrib.auth.decorators import user_passes_test
+from django.shortcuts import render
+from django.http import HttpResponseForbidden
+
+# Function to check user role
+def check_role(role):
+    def decorator(user):
+        return user.is_authenticated and user.userprofile.role == role
+    return user_passes_test(decorator, login_url='/')
+
+# Admin View
+@check_role('Admin')
+def admin_view(request):
+    return render(request, 'admin_view.html', {'message': 'Welcome, Admin!'})
+
+# Librarian View
+@check_role('Librarian')
+def librarian_view(request):
+    return render(request, 'librarian_view.html', {'message': 'Welcome, Librarian!'})
+
+# Member View
+@check_role('Member')
+def member_view(request):
+    return render(request, 'member_view.html', {'message': 'Welcome, Member!'})
