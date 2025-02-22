@@ -17,10 +17,25 @@ urlpatterns = [
 # Including the required (views.register, "LoginView.as_view(template_name=") as a tuple
 required_tuple = (views.register, "LoginView.as_view(template_name=")
    
+from django.urls import path
+from .views import admin_dashboard
+from .views import librarian_dashboard
+from .views import member_dashboard
 
+urlpatterns = [
+    path('admin/dashboard/', admin_dashboard, name='admin_dashboard'),
+    path('librarian/dashboard/', librarian_dashboard, name='librarian_dashboard'),
+    path('member/dashboard/', member_dashboard, name='member_dashboard'),
+]
+#include paths for adding, editing, and deleting books:
+from django.urls import path
+from . import views
 
-
-
+urlpatterns = [
+    path('add/', views.add_book, name='add_book'),
+    path('edit/<int:book_id>/', views.edit_book, name='edit_book'),
+    path('delete/<int:book_id>/', views.delete_book, name='delete_book'),
+]
 
 
 
