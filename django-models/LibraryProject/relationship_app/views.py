@@ -111,10 +111,8 @@ def member_dashboard(request):
 # permission checks in the views that handle book creation, modification, and deletion.
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import permission_required
-from django.http import HttpResponseForbidden
 from .models import Book
 
-# View to add a book 
 @permission_required('relationship_app.can_add_book', raise_exception=True)
 def add_book(request):
     if request.method == 'POST':
@@ -125,11 +123,10 @@ def add_book(request):
 
         if title and author and published_date and isbn:
             Book.objects.create(title=title, author=author, published_date=published_date, isbn=isbn)
-            return redirect('book_list')  # Redirect to the book listing page
+            return redirect('book_list')
 
-    return render(request, 'relationship_app/add_book.html')  # Show add book page
+    return render(request, 'relationship_app/add_book.html')
 
-# View to edit a book 
 @permission_required('relationship_app.can_change_book', raise_exception=True)
 def edit_book(request, book_id):
     book = get_object_or_404(Book, id=book_id)
@@ -144,7 +141,6 @@ def edit_book(request, book_id):
 
     return render(request, 'relationship_app/edit_book.html', {'book': book})
 
-# View to delete a book 
 @permission_required('relationship_app.can_delete_book', raise_exception=True)
 def delete_book(request, book_id):
     book = get_object_or_404(Book, id=book_id)
