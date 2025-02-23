@@ -148,5 +148,10 @@ def delete_book(request, book_id):
     if request.method == 'POST':
         book.delete()
         return redirect('book_list')
-
     return render(request, 'relationship_app/delete_book.html', {'book': book})
+
+# function to handle the homepage:
+from django.http import HttpResponse
+
+def home(request):
+    return HttpResponse("Welcome to the Library App!")
