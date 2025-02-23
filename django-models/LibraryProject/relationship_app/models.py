@@ -12,16 +12,20 @@ class Book(models.Model):
     title = models.CharField(max_length=200)
     author = models.ForeignKey(Author, on_delete=models.CASCADE, related_name="books")
 
-    def __str__(self):
-        return self.title
+# Update the Book model to include a Meta class with defined custom permissions.
+class Meta:
+        permissions = [
+            ("can_add_book", "Can add book"),
+            ("can_change_book", "Can edit book"),
+            ("can_delete_book", "Can delete book"),
+        ]
+
+    
 
 # Library Model with ManyToManyField to Book 
 class Library(models.Model):
     name = models.CharField(max_length=200)
-    books = models.ManyToManyField(Book, related_name="libraries")  
-
-    def __str__(self):
-        return self.name
+    books = models.ManyToManyField('relationship_app.Book') 
 
 # Librarian Model with OneToOneField to Library 
 class Librarian(models.Model):
@@ -58,3 +62,7 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     instance.userprofile.save()
+
+
+
+  
