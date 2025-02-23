@@ -30,14 +30,12 @@ urlpatterns = [
 #include paths for adding, editing, and deleting books:
 from django.urls import path
 from . import views
-
+from .views import add_book, edit_book, delete_book
 urlpatterns = [
     path('add/', views.add_book, name='add_book'),
     path('edit/<int:book_id>/', views.edit_book, name='edit_book'),
     path('delete/<int:book_id>/', views.delete_book, name='delete_book'),
 ]
-
-
 
 
 
