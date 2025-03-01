@@ -1,4 +1,8 @@
 from django.db import models
+from django.conf import settings
+from django.contrib.auth.models import AbstractUser, BaseUserManager
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 # Author Model
 class Author(models.Model):
@@ -9,23 +13,20 @@ class Author(models.Model):
 
 # Book Model
 class Book(models.Model):  
-     title = models.CharField(max_length=200)
-     author = models.ForeignKey(Author, on_delete=models.CASCADE, related_name="books")
+    title = models.CharField(max_length=200)
+    author = models.ForeignKey(Author, on_delete=models.CASCADE, related_name="books")
 
-# Update the Book model to include a Meta class with defined custom permissions.
-class Meta:
+    class Meta:  
         permissions = [
             ("can_add_book", "Can add book"),
             ("can_change_book", "Can edit book"),
             ("can_delete_book", "Can delete book"),
         ]
 
-    
-
 # Library Model with ManyToManyField to Book 
 class Library(models.Model):
-      name = models.CharField(max_length=200)
-      books = models.ManyToManyField('relationship_app.Book') 
+    name = models.CharField(max_length=200)
+    books = models.ManyToManyField(Book)  # Fixed reference to Book
 
 # Librarian Model with OneToOneField to Library 
 class Librarian(models.Model):
@@ -36,11 +37,6 @@ class Librarian(models.Model):
         return self.name
 
 # Role-Based Access Control in Django
-from django.db import models
-from django.conf import settings
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-
 class UserProfile(models.Model):
     USER_ROLES = [
         ('Admin', 'Admin'),
@@ -62,14 +58,11 @@ def create_user_profile(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def save_user_profile(sender, instance, **kwargs):
-    instance.userprofile.save()
-
-from django.contrib.auth.models import AbstractUser, BaseUserManager
-from django.db import models
+    if hasattr(instance, "userprofile"):  
+        instance.userprofile.save()
 
 # Custom User Manager
 class CustomUserManager(BaseUserManager):
-#Custom manager for CustomUser model
 
     def create_user(self, username, email, password=None, **extra_fields):
         if not email:
@@ -79,15 +72,13 @@ class CustomUserManager(BaseUserManager):
         user.set_password(password)
         user.save(using=self._db)
         return user
- #Create a superuser with an email and password.
+
     def create_superuser(self, username, email, password=None, **extra_fields):
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
-
         return self.create_user(username, email, password, **extra_fields)
 
 # Custom User Model
-#Extending Django's default user model with additional fields
 class CustomUser(AbstractUser):
     date_of_birth = models.DateField(null=True, blank=True)
     profile_photo = models.ImageField(upload_to="profile_photos/", null=True, blank=True)
@@ -97,7 +88,7 @@ class CustomUser(AbstractUser):
     def __str__(self):
         return self.username
 
-class Meta:
+    class Meta: 
         permissions = [
             ("can_view_dashboard", "Can View Dashboard"),
             ("can_edit_profile", "Can Edit Profile"),
