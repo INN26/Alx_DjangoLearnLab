@@ -129,27 +129,38 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-# Default primary key field type
+#Scurity Configurations
 DEBUG = False
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# Ensure Django properly detects HTTPS behind a proxy (e.g., Nginx, AWS ELB)
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# Enforce HTTPS 
+SECURE_SSL_REDIRECT = True # Redirect all HTTP traffic to HTTPS
+
 # Enforce HTTPS settings prevent unauthorized access and session hijacking.
-SECURE_HSTS_SECONDS = 31536000  # Enables HTTP Strict Transport Security (1 year)
-SECURE_HSTS_PRELOAD = True
-SECURE_SSL_REDIRECT = True
-CSRF_COOKIE_SECURE = True # Prevents sending CSRF cookies over HTTP
+SECURE_HSTS_SECONDS = 31536000  # instruct browsers to only access the site via HTTPS for the specified time. (1 year)
+SECURE_HSTS_PRELOAD = True # Allows preloading HSTS into browsers
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True # # Applies HSTS to all subdomains
-SECURE_HSTS_PRELOAD = True  # Allows preloading HSTS into browsers
+
+#secure cookies
+CSRF_COOKIE_SECURE = True #  to ensure CSRF cookies are only transmitted over HTTPS.
 SESSION_COOKIE_SECURE = True #Ensures session cookies are only sent over HTTPS
 
-#prevent XSS attacking
-SECURE_BROWSER_XSS_FILTER = True  # Enables XSS protection
-X_FRAME_OPTIONS = "DENY"  # Prevents Clickjacking
-SECURE_CONTENT_TYPE_NOSNIFF = True  # Blocks malicious MIME sniffing
+#Secure HTTP Headers prevent XSS attacking
+SECURE_BROWSER_XSS_FILTER = True  # Enable the browser’s XSS filtering and help prevent cross-site scripting attacks.
+X_FRAME_OPTIONS = "DENY"  # prevent your site from being framed and protect against clickjacking.
+SECURE_CONTENT_TYPE_NOSNIFF = True  # prevent browsers from MIME-sniffing a response away from the declared content-type.
+
+ # Ensure secure referrer policy
+SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
 
 # Use ALLOWED_HOSTS and Secure CSRF_TRUSTED_ORIGINS
 ALLOWED_HOSTS = ['yourdomain.com', 'www.yourdomain.com', '127.0.0.1']  # Specify trusted domains
 
-CSRF_TRUSTED_ORIGINS = ['https://yourdomain.com', 'https://www.yourdomain.com']  # Allows secure form submissions
+CSRF_TRUSTED_ORIGINS = ['https://yourdomain.com'] # Allows secure form submissions
+
+
 
 
