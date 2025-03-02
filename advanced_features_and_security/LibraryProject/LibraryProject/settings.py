@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'relationship_app',
     'bookshelf',
+    'csp',
 ]
 AUTH_USER_MODEL = "bookshelf.CustomUser"
 
@@ -54,8 +55,12 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'csp.middleware.CSPMiddleware',
 ]
-
+#CSP blocks unauthorized scripts from running.
+CSP_DEFAULT_SRC = ["'self'"]  # Only allows content from the same origin
+CSP_SCRIPT_SRC = ["'self'", "https://trusted-cdn.com"]  # Allow scripts from specific sources
+CSP_STYLE_SRC = ["'self'", "'unsafe-inline'"]  # Allow styles from local sources
 ROOT_URLCONF = 'LibraryProject.urls'
 
 TEMPLATES = [
@@ -125,19 +130,26 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 # Default primary key field type
-# https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
-
+DEBUG = False
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-SECURE_BROWSER_XSS_FILTER = True
-SECURE_CONTENT_TYPE_NOSNIFF = True
-X_FRAME_OPTIONS = 'DENY'
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SECURE = True
-SECURE_HSTS_SECONDS = 31536000
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-# Enforce HTTPS
+
+# Enforce HTTPS settings prevent unauthorized access and session hijacking.
+SECURE_HSTS_SECONDS = 31536000  # Enables HTTP Strict Transport Security (1 year)
 SECURE_HSTS_PRELOAD = True
 SECURE_SSL_REDIRECT = True
-#Secure Cookies
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True # Prevents sending CSRF cookies over HTTP
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True # # Applies HSTS to all subdomains
+SECURE_HSTS_PRELOAD = True  # Allows preloading HSTS into browsers
+SESSION_COOKIE_SECURE = True #Ensures session cookies are only sent over HTTPS
+
+#prevent XSS attacking
+SECURE_BROWSER_XSS_FILTER = True  # Enables XSS protection
+X_FRAME_OPTIONS = "DENY"  # Prevents Clickjacking
+SECURE_CONTENT_TYPE_NOSNIFF = True  # Blocks malicious MIME sniffing
+
+# Use ALLOWED_HOSTS and Secure CSRF_TRUSTED_ORIGINS
+ALLOWED_HOSTS = ['yourdomain.com', 'www.yourdomain.com', '127.0.0.1']  # Specify trusted domains
+
+CSRF_TRUSTED_ORIGINS = ['https://yourdomain.com', 'https://www.yourdomain.com']  # Allows secure form submissions
+
+
