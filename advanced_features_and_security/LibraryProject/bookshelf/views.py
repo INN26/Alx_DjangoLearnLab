@@ -35,3 +35,10 @@ def delete_book(request, book_id):
     book = get_object_or_404(Book, id=book_id)
     book.delete()
     return HttpResponse("Book Deleted Successfully")
+
+# using Django ORM escapes user inputs to prevents SQL injection.
+from .forms import ExampleForm
+from django.db.models import Q 
+def permission_required(request):
+       query = request.GET.get("search", "").strip()
+       books = Book.objects.filter(Q(title__icontains=query))
