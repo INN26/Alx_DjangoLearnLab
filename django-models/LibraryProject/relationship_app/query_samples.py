@@ -38,7 +38,7 @@ library.books.add(book1, book2)
 # Create or get librarian
 librarian, created_librarian = Librarian.objects.get_or_create(name="Maria Grace", library=library)
 
-# etrieve the librarian using `Librarian.objects.get(library=library)`
+# Retrieve the librarian using `Librarian.objects.get(library=library)`
 librarian_for_library = Librarian.objects.get(library=library)
 
 # Display librarian details
