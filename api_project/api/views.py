@@ -5,15 +5,19 @@ from .serializers import BookSerializer
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import status
-
+from rest_framework.permissions import IsAuthenticated 
+from .permissions import IsAdminUser
 class BookViewSets(viewsets.ModelViewSet):
      #A ViewSet for viewing and editing book instances.
      queryset = Book.objects.all()
      serializer_class = BookSerializer
+     permission_classes = [IsAuthenticated]  # Restricts access to authenticated users
 
 class BookList(generics.ListAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
+    permission_classes = [IsAuthenticated]  
+    permission_classes = [IsAdminUser]  # Only admin users can view books
 
 class BookDetailView(APIView):
     def get_object(self, pk):
