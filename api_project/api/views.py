@@ -7,10 +7,9 @@ class BookList(generics.ListAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
    
-class BookViewSets(rest_framework.viewsets.ModelViewSet):
-     """
-    A ViewSet for viewing and editing book instances.
-    """
+class BookViewSets(viewsets.ModelViewSet):
+     
+    #A ViewSet for viewing and editing book instances.
      queryset = Book.objects.all()
      serializer_class = BookSerializer
 
