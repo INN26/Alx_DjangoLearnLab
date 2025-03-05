@@ -2,11 +2,11 @@ from django.urls import path, include
 from .views import BookList
 #Configure the Router.
 from rest_framework.routers import DefaultRouter
-from .views import BookViewSet
+from .views import BookViewSets
 
 # Create a router and register our viewsets
 router = DefaultRouter()
-router.register(r'books-all', BookViewSet, basename='book_all' )
+router.register(r'books-all', BookViewSets, basename='book_all' )
 
 urlpatterns = [
     # Route for the BookList view (ListAPIView)
