@@ -3,7 +3,7 @@ from .views import BookList, BookDetailView
 #Configure the Router.
 from rest_framework.routers import DefaultRouter
 from .views import BookViewSets
-
+from rest_framework.authtoken.views import obtain_auth_token
 # Create a router and register our viewsets
 router = DefaultRouter()
 router.register(r'books-all', BookViewSets, basename='book_all' )
@@ -17,8 +17,7 @@ urlpatterns = [
 
     # Include the router URLs for BookViewSet (all CRUD operations)
     path('', include(router.urls)),  # This includes all routes registered with the router
+    
+    #Generate and Use Tokens
+    path('api-token-auth/', obtain_auth_token, name='api_token_auth'),
 ]
-
-
-
-
