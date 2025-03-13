@@ -3,7 +3,7 @@ from rest_framework import generics, permissions
 from .models import Book
 from . serializers import BookSerializer
 from rest_framework import filters
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 #setting generic views for the Book model to handle CRUD operations.
 #A CreateView for adding a new book.
 class CustomBookCreateView(generics.CreateAPIView):
