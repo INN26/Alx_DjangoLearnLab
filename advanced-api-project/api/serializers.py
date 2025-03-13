@@ -18,8 +18,12 @@ class BookSerializer(serializers.ModelsSerializer):
 #AuthorSerializer includes a nested representation of books.  
 #Nested Serializers for Related Objects  
 class AuthorSerializer(serializers.ModelsSerializer):
-    books = BookSerializer(many=True, read_only=True)
-
     class Meta:
-        model = Author
-        fields = ['name', 'books']']    
+         model = Author
+         fields = ['name']
+
+    class BookSerializer(serializers.ModelsSerializer):
+                 books = BookSerializer(many = True, read_only = True) #nested serialiser
+                 class Meta:
+                    model = Book
+                    fields = ['name', 'books']
