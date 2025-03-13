@@ -4,7 +4,7 @@ import datetime
 
 #Creating custom Serializers
 # Serializers convert model instances into JSON format for APIs and handle validation.
-class BookSerializer(serializers.ModelsSerializer):
+class BookSerializer(serializers.ModelSerializer):
     class Meta:
         model = Book
         fields = '__all__'
@@ -17,12 +17,12 @@ class BookSerializer(serializers.ModelsSerializer):
          return publication_year
 #AuthorSerializer includes a nested representation of books.  
 #Nested Serializers for Related Objects  
-class AuthorSerializer(serializers.ModelsSerializer):
+class AuthorSerializer(serializers.ModelSerializer):
     class Meta:
          model = Author
          fields = ['name']
 
-    class BookSerializer(serializers.ModelsSerializer):
+    class BookSerializer(serializers.ModelSerializer):
                  books = BookSerializer(many = True, read_only = True) #nested serialiser
                  class Meta:
                     model = Book
