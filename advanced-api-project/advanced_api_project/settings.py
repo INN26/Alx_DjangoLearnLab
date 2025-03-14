@@ -84,10 +84,13 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'advanced_api_project.wsgi.application'
 
+import sys
+
 
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
+import sys
 
 DATABASES = {
     'default': {
