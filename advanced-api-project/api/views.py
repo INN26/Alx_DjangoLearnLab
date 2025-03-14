@@ -6,6 +6,12 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticate
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics
 from django_filters import rest_framework
+
+
+class BookViewSet(viewsets.ModelViewSet):  # This should handle all CRUD operations
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+    
 #setting generic views for the Book model to handle CRUD operations.
 #A CreateView for adding a new book.
 class CustomBookCreateView(generics.CreateAPIView):
