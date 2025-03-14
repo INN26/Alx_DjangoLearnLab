@@ -36,7 +36,8 @@ class BookAPITestCase(APITestCase):
         url = reverse('book-list')
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(Book.objects.count(), 2)
+        self.assertIn("Things Fall Apart", str(response.data))
+        self.assertIn("No Longer at Ease", str(response.data))
 
     def test_create_book(self):
         """Test creating a new book"""
@@ -44,12 +45,14 @@ class BookAPITestCase(APITestCase):
         response = self.client.post(url, self.valid_data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Book.objects.count(), 3)
+        self.assertEqual(response.data["title"], "Arrow of God")
 
     def test_create_invalid_book(self):
         """Test creating a book with invalid data"""
         url = reverse('book-list')
         response = self.client.post(url, self.invalid_data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("This field may not be blank", str(response.data))
 
     def test_update_book(self):
         """Test updating an existing book"""
@@ -63,6 +66,7 @@ class BookAPITestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.book1.refresh_from_db()
         self.assertEqual(self.book1.title, "Things Fall Apart (Updated)")
+        self.assertEqual(response.data["title"], "Things Fall Apart (Updated)")
 
     def test_delete_book(self):
         """Test deleting a book"""
@@ -76,16 +80,18 @@ class BookAPITestCase(APITestCase):
         url = reverse('book-list') + "?author=Chinua Achebe"
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn("Things Fall Apart", str(response.data))
 
     def test_search_books_by_title(self):
         """Test searching books by title"""
         url = reverse('book-list') + "?search=No Longer at Ease"
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn("No Longer at Ease", str(response.data))
 
     def test_order_books_by_year(self):
         """Test ordering books by publication year"""
         url = reverse('book-list') + "?ordering=publication_year"
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(Book.objects.order_by('publication_year').first().title, "Things Fall Apart")
+        self.assertEqual(response.data[0]["title"], "Things Fall Apart")
