@@ -1,9 +1,10 @@
 from django.shortcuts import render
-from rest_framework import generics, permissions, filters
+from rest_framework import viewsets, generics, permissions, filters
 from .models import Book
 from . serializers import BookSerializer
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from django_filters.rest_framework import DjangoFilterBackend
+from django_filters import rest_framework
 #setting generic views for the Book model to handle CRUD operations.
 #A CreateView for adding a new book.
 class CustomBookCreateView(generics.CreateAPIView):
@@ -11,16 +12,17 @@ class CustomBookCreateView(generics.CreateAPIView):
     serializer_class = BookSerializer
     permission_classes = [IsAuthenticated]  # Only authenticated users can add a new book.
     filter_backends = [filters.SearchFilter]
-    search_fields = ['title']
+    SearchFilter_fields = ['title']
 
 #ListView for retrieving all books.
 class CustomBookListView(generics.ListAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]  # Anyone can view books.
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
-    search_fields = ['title', 'author']  # Assuming 'author' is a field in Book model.
-    ordering_fields = ['title', 'publication_year']  # Assuming 'published_date' exists.
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['title', 'author', 'publication_year']
+    SearchFilter_fields = ['title', 'author']  # Assuming 'author' is a field in Book model.
+    OrderingFilter_fields = ['title', 'publication_year']  # Assuming 'published_date' exists.
      
 #A DetailView for retrieving a single book by ID.
 class CustomBookDetailView(generics.RetrieveAPIView):
@@ -34,7 +36,7 @@ class CustomBookUpdateView(generics.UpdateAPIView):
     serializer_class = BookSerializer
     permission_classes = [IsAuthenticated]  # Only authenticated users can modify a book.
     filter_backends = [filters.SearchFilter]
-    search_fields = ['title']
+    SearchFilter_fields = ['title']
 
 #A DeleteView for removing a book.
 class CustomBookDeleteView(generics.DestroyAPIView):
