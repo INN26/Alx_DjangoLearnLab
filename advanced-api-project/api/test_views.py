@@ -55,7 +55,11 @@ class BookAPITestCase(APITestCase):
     def test_update_book(self):
         """Test updating an existing book"""
         url = reverse('book-detail', kwargs={'pk': self.book1.pk})
-        response = self.client.put(url, {"title": "Things Fall Apart (Updated)", "author": self.author1.id, "publication_year": 1958}, format='json')
+        response = self.client.put(url, {
+            "title": "Things Fall Apart (Updated)", 
+            "author": self.author1.id, 
+            "publication_year": 1958
+        }, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_delete_book(self):
@@ -81,4 +85,3 @@ class BookAPITestCase(APITestCase):
         url = reverse('book-list') + "?ordering=publication_year"
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        
