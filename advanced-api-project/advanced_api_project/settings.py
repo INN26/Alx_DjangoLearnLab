@@ -40,8 +40,19 @@ INSTALLED_APPS = [
     'api',
     'advanced_api_project',
     'rest_framework',
+    'rest_framework.authtoken',  # Ensure this is added
 ]
 
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',  # Change to IsAuthenticatedOrReadOnly if needed
+    ]
+}
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -71,6 +82,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'advanced_api_project.wsgi.application'
+
 
 
 # Database
