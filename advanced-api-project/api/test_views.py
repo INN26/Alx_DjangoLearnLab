@@ -3,15 +3,18 @@ from rest_framework.test import APITestCase
 from rest_framework import status
 from django.urls import reverse
 from .models import Book
+from api.models import Book, Author  # Ensure you import the correct models
 
-class BookAPITestCase(APITestCase):
-    
+class BookAPITestCase(TestCase):
     def setUp(self):
-        """Set up initial test data"""
-        self.book1 = Book.objects.create(title="Things Fall Apart", author="Chinua Achebe", publication_year=1958)
-        self.book2 = Book.objects.create(title="Half of a Yellow Sun", author="Chimamanda Ngozi Adichie", publication_year=2006)
-        self.valid_data = {"title": "Purple Hibiscus", "author": "Chimamanda Ngozi Adichie", "publication_year": 2003}
-        self.invalid_data = {"title": "", "author": "Unknown", "publication_year": 2020}
+        self.author1 = Author.objects.create(name="Chinua Achebe")  # Create an Author instance
+        self.login  =self.client.login
+        self.book1 = Book.objects.create(
+            title="Things Fall Apart", 
+            author=self.author1,  # Use the Author instance
+            publication_year=1958
+
+        )
 
     def test_get_book_list(self):
         """Test retrieving a list of books"""
