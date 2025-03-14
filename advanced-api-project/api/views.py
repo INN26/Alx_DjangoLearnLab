@@ -1,9 +1,10 @@
 from django.shortcuts import render
-from rest_framework import viewsets, generics, permissions, filters
+from rest_framework import viewsets,  permissions, filters
 from .models import Book
 from . serializers import BookSerializer
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import generics
 from django_filters import rest_framework
 #setting generic views for the Book model to handle CRUD operations.
 #A CreateView for adding a new book.
