@@ -1,24 +1,34 @@
 from django.test import TestCase
-from rest_framework.test import APITestCase
+from rest_framework.test import APITestCase, APIClient
 from rest_framework import status
 from django.urls import reverse
-from .models import Book
-from api.models import Book, Author  # Ensure you import the correct models
+from django.contrib.auth.models import User
+from api.models import Book, Author
 
-class BookAPITestCase(TestCase):
+class BookAPITestCase(APITestCase):
     def setUp(self):
-        self.author1 = Author.objects.create(name="Chinua Achebe")  # Create an Author instance
-        self.login  =self.client.login
-        self.book1 = Book.objects.create(
-            title="Things Fall Apart", 
-            author=self.author1,  # Use the Author instance
-            publication_year=1958
+        self.client = APIClient()
+        self.user = User.objects.create_user(username='testuser', password='testpassword')
+        self.client.force_authenticate(user=self.user)
 
-        )
+        self.author1 = Author.objects.create(name="Chinua Achebe")  
+        self.book1 = Book.objects.create(title="Things Fall Apart", author=self.author1, publication_year=1958)
+        self.book2 = Book.objects.create(title="Arrow of God", author=self.author1, publication_year=1964)
+
+        self.valid_data = {
+            "title": "No Longer at Ease",
+            "author": self.author1.pk,  # Use ID, not name
+            "publication_year": 1960
+        }
+
+        self.invalid_data = {
+            "title": "",  # Empty title should fail validation
+            "author": self.author1.pk
+        }
 
     def test_get_book_list(self):
         """Test retrieving a list of books"""
-        url = reverse('book-list')  # Ensure your URL name matches the router
+        url = reverse('book-list')  
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 2)
@@ -39,7 +49,7 @@ class BookAPITestCase(TestCase):
     def test_update_book(self):
         """Test updating an existing book"""
         url = reverse('book-detail', kwargs={'pk': self.book1.pk})
-        response = self.client.put(url, {"title": "Things Fall Apart (Updated)", "author": "Chinua Achebe", "publication_year": 1958}, format='json')
+        response = self.client.put(url, {"title": "Things Fall Apart (Updated)", "author": self.author1.pk, "publication_year": 1958}, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.book1.refresh_from_db()
         self.assertEqual(self.book1.title, "Things Fall Apart (Updated)")
@@ -53,10 +63,10 @@ class BookAPITestCase(TestCase):
 
     def test_filter_books_by_author(self):
         """Test filtering books by author"""
-        url = reverse('book-list') + "?author=Chinua Achebe"
+        url = reverse('book-list') + f"?author_id={self.author1.pk}"
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 1)
+        self.assertEqual(len(response.data), 2)
 
     def test_search_books_by_title(self):
         """Test searching books by title"""
@@ -70,4 +80,4 @@ class BookAPITestCase(TestCase):
         url = reverse('book-list') + "?ordering=publication_year"
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data[0]['title'], "Things Fall Apart")  # 1958 comes before 2006
+        self.assertEqual(response.data[0]['title'], "Things Fall Apart")  # 1958 comes before 1964
