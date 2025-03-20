@@ -1,6 +1,9 @@
 from django.urls import path
 from.import views
 from .views import CommentCreateView, CommentUpdateView, CommentDeleteView
+from django.urls import path
+from .views import search_posts
+from taggit.views import TaggedItemView
 from .views import (
     PostListView,
     PostDetailView,
@@ -19,4 +22,9 @@ urlpatterns = [
     path('post/<int:pk>/comments/new/', CommentCreateView.as_view(), name='comment_create'),
     path('comment/<int:pk>/update/', CommentUpdateView.as_view(), name='comment_update'),
     path('comment/<int:pk>/delete/', CommentDeleteView.as_view(), name='comment_delete'),
+]
+
+urlpatterns = [
+    path('search/', search_posts, name='search_posts'),
+    path('tags/<slug:tag_slug>/', TaggedItemView.as_view(model=Post), name='posts_by_tag'),
 ]
