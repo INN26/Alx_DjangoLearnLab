@@ -1,13 +1,15 @@
-document.addEventListener("DOMContentLoaded", function() {
-    const formInputs = document.querySelectorAll("input");
+document.addEventListener("DOMContentLoaded", function () {
+    let loginForm = document.querySelector("#loginForm");
 
-    formInputs.forEach(input => {
-        input.addEventListener("focus", () => {
-            input.style.borderColor = "#007bff";
-        });
+    if (loginForm) {
+        loginForm.addEventListener("submit", function (event) {
+            let email = document.querySelector("#email").value;
+            let password = document.querySelector("#password").value;
 
-        input.addEventListener("blur", () => {
-            input.style.borderColor = "#ccc";
+            if (email === "" || password === "") {
+                event.preventDefault();
+                alert("All fields are required!");
+            }
         });
-    });
+    }
 });
