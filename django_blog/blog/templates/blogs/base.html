@@ -57,3 +57,8 @@
     </div>
 </body>
 </html>
+
+<form action="{% url 'search_posts' %}" method="GET">
+    <input type="text" name="q" placeholder="Search posts..." required>
+    <button type="submit">Search</button>
+</form>
