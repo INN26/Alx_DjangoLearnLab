@@ -10,7 +10,7 @@ from django.urls import reverse_lazy
 from .models import Post, Comment
 from .forms import CommentForm
 from django.db.models import Q
-
+from taggit.models import Tag
 # Create your views here.
 def home(request):
     return render(request, 'blog/home.html')
@@ -173,4 +173,12 @@ def search_posts(request):
 
     return render(request, 'blog/search_results.html', {'results': results, 'query': query})
 
+class PostByTagListView(ListView):
+    model = Post
+    template_name = 'blog/posts_by_tag.html'  # Create this template
+    context_object_name = 'posts'
+
+    def get_queryset(self):
+        tag_name = self.kwargs.get('tag_name')
+        return Post.objects.filter(tags__name__iexact=tag_name)
 
