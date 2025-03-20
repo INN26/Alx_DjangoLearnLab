@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from. models import Profile
 from. models import Post
 from .models import Comment
-from taggit.forms import TagField
+from taggit.forms import TagField, TagWidget# Import TagWidget
 
 #Form to update User.
 class UserUpdateForm(forms.ModelForm):
@@ -33,7 +33,7 @@ class CommentForm(forms.ModelForm):
         }
 
 class PostForm(forms.ModelForm):
-    tags = TagField(required=False)  # Allow optional tags
+    tags = TagField(widget=TagWidget(), required=False)    # Use TagWidget for better tag input
 
     class Meta:
         model = Post
