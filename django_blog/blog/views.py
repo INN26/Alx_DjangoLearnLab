@@ -122,23 +122,41 @@ def post_detail(request, post_id):
 
     return render(request, 'blog/post_detail.html', {'post': post, 'comments': comments, 'form': form})
 
-@login_required
-def comment_edit(request, comment_id):
-    comment = get_object_or_404(Comment, id=comment_id, author=request.user)
-    if request.method == "POST":
-        form = CommentForm(request.POST, instance=comment)
-        if form.is_valid():
-            form.save()
-            return redirect('post_detail', post_id=comment.post.id)
-    else:
-        form = CommentForm(instance=comment)
-    return render(request, 'blog/comment_form.html', {'form': form, 'comment': comment})
+class CommentCreateView(LoginRequiredMixin, CreateView):
+    model = Comment
+    form_class = CommentForm
+    template_name = "blog/comment_form.html"
 
-@login_required
-def comment_delete(request, comment_id):
-    comment = get_object_or_404(Comment, id=comment_id, author=request.user)
-    post_id = comment.post.id
-    if request.method == "POST":
-        comment.delete()
-        return redirect('post_detail', post_id=post_id)
-    return render(request, 'blog/comment_confirm_delete.html', {'comment': comment})
+    def form_valid(self, form):
+        post = get_object_or_404(Post, id=self.kwargs['post_id'])
+        form.instance.post = post
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return self.object.post.get_absolute_url()
+
+class CommentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Comment
+    form_class = CommentForm
+    template_name = "blog/comment_form.html"
+
+    def get_success_url(self):
+        return self.object.post.get_absolute_url()
+
+    def test_func(self):
+        comment = self.get_object()
+        return self.request.user == comment.author
+
+class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Comment
+    template_name = "blog/comment_confirm_delete.html"
+
+    def get_success_url(self):
+        return self.object.post.get_absolute_url()
+
+    def test_func(self):
+        comment = self.get_object()
+        return self.request.user == comment.author
+
+
