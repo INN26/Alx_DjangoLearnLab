@@ -1,6 +1,7 @@
 from django.urls import path
 from.import views
 from .views import CommentCreateView, CommentUpdateView, CommentDeleteView
+from .views import PostListView, PostDetailView, PostCreateView, PostUpdateView, PostDeleteView
 from django.urls import path, Post
 from .views import search_posts
 from taggit.views import TaggedItemView
@@ -37,3 +38,4 @@ urlpatterns = [
     
     path('tags/<str:tag_name>/', PostByTagListView.as_view(), name='posts_by_tag'),
 ]
+
