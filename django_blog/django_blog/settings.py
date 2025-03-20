@@ -22,6 +22,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'blog',
+    'accounts',
 ]
 
 # Middleware settings
@@ -44,6 +45,7 @@ STATIC_URL = '/static/'
 # Ensure the static directory exists
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'blog', 'static'),
+
 ]
 
 # Templates settings
