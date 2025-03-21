@@ -13,6 +13,7 @@ DEBUG = True
 # Allowed hosts
 ALLOWED_HOSTS = []
 
+
 # Installed applications
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -22,7 +23,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'blog',
-    'accounts',
     'taggit',
 ]
 
@@ -42,12 +42,13 @@ ROOT_URLCONF = 'django_blog.urls'
 
 # Static files settings
 STATIC_URL = '/static/'
-
-# Ensure the static directory exists
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'blog', 'static'),
-
+    os.path.join (BASE_DIR, 'blog', 'static'),
 ]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
 
 # Templates settings
 TEMPLATES = [
