@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'blog',
     'taggit',
+    'accounts',
 ]
 
 # Middleware settings
@@ -42,9 +43,7 @@ ROOT_URLCONF = 'django_blog.urls'
 
 # Static files settings
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    os.path.join (BASE_DIR, 'blog', 'static'),
-]
+STATICFILES_DIRS = [BASE_DIR /  "blog/static",]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 LOGIN_REDIRECT_URL = '/'
@@ -54,7 +53,7 @@ LOGOUT_REDIRECT_URL = '/'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'blog', 'templates')],
+        'DIRS': [BASE_DIR / 'blog/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
