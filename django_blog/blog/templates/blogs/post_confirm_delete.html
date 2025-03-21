@@ -1,12 +1,9 @@
-{% extends "blog/base.html" %}
+{% extends "base.html" %}
 {% block content %}
-<h2>Are you sure you want to delete this post?</h2>
-<p><strong>{{ post.title }}</strong></p>
-
-<form method="POST">
+  <h2>Are you sure you want to delete this post?</h2>
+  <form method="POST">
     {% csrf_token %}
-    <button type="submit" class="btn btn-danger">Delete</button>
-</form>
-
-<a href="{% url 'post-detail' post.id %}" class="btn btn-secondary">Cancel</a>
+    <button type="submit">Delete</button>
+  </form>
+  <a href="{% url 'post-detail' post.pk %}">Cancel</a>
 {% endblock %}
