@@ -38,5 +38,5 @@ class UserFeedView(ListAPIView):
     def get_queryset(self):
         """Retrieve posts from followed users."""
         user = self.request.user
-        followed_users = user.following.all()
-        return Post.objects.filter(author__in=followed_users).order_by("-created_at")
+        following_users = user.following.all()
+        return Post.objects.filter(author__in= following_users ).order_by('-created_at')
