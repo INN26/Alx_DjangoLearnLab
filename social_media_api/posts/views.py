@@ -1,4 +1,4 @@
-from rest_framework import viewsets, permissions, status
+from rest_framework import viewsets, permissions, status, generics
 from rest_framework.pagination import PageNumberPagination
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.permissions import IsAuthenticated
@@ -52,7 +52,7 @@ class LikePostView(APIView):
 
     def post(self, request, pk):
         """Like a post."""
-        post = get_object_or_404(Post, pk=pk)
+        post = generics.get_object_or_404(Post, pk=pk)
         like, created = Like.objects.get_or_create(user=request.user, post=post)
 
         if created:
@@ -72,7 +72,7 @@ class UnlikePostView(APIView):
 
     def post(self, request, pk):
         """Unlike a post."""
-        like = get_object_or_404(Like, user=request.user, post_id=pk)
+        like = generics.get_object_or_404(Like, user=request.user, post_id=pk)
         like.delete()
         return Response({"message": "Post unliked successfully."}, status=status.HTTP_200_OK)
 
