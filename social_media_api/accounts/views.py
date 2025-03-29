@@ -43,7 +43,7 @@ class FollowUserView(GenericAPIView):  # Now using GenericAPIView
         except CustomUser.DoesNotExist:
             return Response({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
 
-class UnfollowUserView(GenericAPIView):  # Now using GenericAPIView
+class UnfollowUserView(generics.GenericAPIView):  # Now using GenericAPIView
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, user_id):
