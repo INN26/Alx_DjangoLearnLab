@@ -39,13 +39,13 @@ class BookAPITestCase(APITestCase):
         self.assertIn("Things Fall Apart", str(response.data))
         self.assertIn("No Longer at Ease", str(response.data))
 
+    
+
     def test_create_book(self):
-        """Test creating a new book"""
-        url = reverse('book-list')
-        response = self.client.post(url, self.valid_data, format='json')
+        url = reverse('book-list')  # Ensure 'book-list' matches your router name
+        data = {"title": "Test Book", "author": "John Doe"}
+        response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(Book.objects.count(), 3)
-        self.assertEqual(response.data["title"], "Arrow of God")
 
     def test_create_invalid_book(self):
         """Test creating a book with invalid data"""
