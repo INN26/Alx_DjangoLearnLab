@@ -3,7 +3,6 @@ from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.generics import ListAPIView
-from rest_framework_simplejwt.tokens import RefreshToken
 from .serializers import RegisterSerializer, LoginSerializer, UserSerializer
 
 User = get_user_model()
@@ -37,7 +36,10 @@ class FollowUserView(APIView):
         """Follow a user."""
         try:
             user_to_follow = User.objects.get(id=user_id)
-            request.user.followers.add(user_to_follow)
+            if user_to_follow == request.user:
+                return Response({"error": "You cannot follow yourself."}, status=status.HTTP_400_BAD_REQUEST)
+            
+            request.user.following.add(user_to_follow)
             return Response({"message": "User followed successfully."}, status=status.HTTP_200_OK)
         except User.DoesNotExist:
             return Response({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
@@ -49,7 +51,10 @@ class UnfollowUserView(APIView):
         """Unfollow a user."""
         try:
             user_to_unfollow = User.objects.get(id=user_id)
-            request.user.followers.remove(user_to_unfollow)
+            if user_to_unfollow == request.user:
+                return Response({"error": "You cannot unfollow yourself."}, status=status.HTTP_400_BAD_REQUEST)
+
+            request.user.following.remove(user_to_unfollow)
             return Response({"message": "User unfollowed successfully."}, status=status.HTTP_200_OK)
         except User.DoesNotExist:
             return Response({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
