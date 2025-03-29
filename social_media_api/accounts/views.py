@@ -3,9 +3,9 @@ from rest_framework import generics, permissions
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.views import APIView
+from rest_framework.authtoken.models import Token
 from .serializers import RegisterSerializer, LoginSerializer, UserSerializer
 
-# Create your views here.
 User = get_user_model()
 
 class RegisterView(generics.CreateAPIView):
