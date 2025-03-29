@@ -6,9 +6,11 @@ from rest_framework_simplejwt.tokens import RefreshToken
 User = get_user_model()
 
 class UserSerializer(serializers.ModelSerializer):
+    followers_count = serializers.IntegerField(source="followers.count", read_only=True)
+    following_count = serializers.IntegerField(source="following.count", read_only=True)
     class Meta:   
         model = User
-        fields = ('id', 'username', 'email', 'bio', 'profile_picture', 'followers')
+        fields = ('id', 'username', 'email', 'bio', 'profile_picture', 'followers'  "followers_count", "following_count")
 
 class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
@@ -41,3 +43,5 @@ class LoginSerializer(serializers.Serializer):
             'refresh': str(refresh),
             'access': str(refresh.access_token),
         }
+    
+

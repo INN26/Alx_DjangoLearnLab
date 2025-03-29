@@ -2,6 +2,8 @@ from rest_framework import viewsets, permissions
 from rest_framework.pagination import PageNumberPagination
 from django_filters.rest_framework import DjangoFilterBackend
 from .models import Post, Comment
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.generics import ListAPIView
 from .serializers import PostSerializer, CommentSerializer
 
 class PostPagination(PageNumberPagination):
@@ -27,3 +29,14 @@ class CommentViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
+
+
+class UserFeedView(ListAPIView):
+    serializer_class = PostSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        """Retrieve posts from followed users."""
+        user = self.request.user
+        followed_users = user.following.all()
+        return Post.objects.filter(author__in=followed_users).order_by("-created_at")
